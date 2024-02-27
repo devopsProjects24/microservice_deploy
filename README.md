@@ -1,6 +1,7 @@
 # Provisioning of Project Infrastructure using Terraform
 
 This guide shows how to provision the required infrastructure for javawebapp project using Terraform.
+
 This will provision JENKINS,SONARQUBE,NEXUS and KUBERNETES nodes.
 
 steps include,
