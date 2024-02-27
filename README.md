@@ -1,7 +1,6 @@
 # Provisioning of Project Infrastructure using Terraform
 
 This guide shows how to provision the required infrastructure for javawebapp project using Terraform.
-
 This will provision JENKINS,SONARQUBE,NEXUS and KUBERNETES nodes.
 
 steps include,
@@ -27,12 +26,15 @@ You can Install or update to the latest version of the AWS CLI using the followi
 
 ```bash
 aws configure
+```
+```
 AWS Access Key ID [None]:
 AWS Secret Access Key [None]:
 Default region name [None]: us-east-1
 Default output format [None]:
-```
-terraform files in this repo are written to work with `us-east-1`, so while configuring your aws credentials set `Default region name [None]: us-east-1`
+
+Terraform files in this repo are written to work with `us-east-1`, so while configuring your aws credentials set,
+`Default region name [None]: us-east-1`
 
 ## Clone this repo
 
@@ -60,6 +62,5 @@ cd microservice_deploy/terraform
 
     ```
     Apply complete! Resources: 22 added, 0 changed, 0 destroyed.
-
 * Wait for all instances to be ready (Instance state - `running`, Status check - `2/2 checks passed`). This will take 1-2 minutes. See [EC2 console](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running).
 * If Provisioned successfully, terraform will create the required infrastructure for javawebapp Project.
