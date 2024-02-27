@@ -27,14 +27,14 @@ You can Install or update to the latest version of the AWS CLI using the followi
 ```bash
 aws configure
 ```
+Terraform files in this repo are written to work with `us-east-1`, so while configuring your aws credentials set, 
+`Default region name [None]: us-east-1`
 ```
 AWS Access Key ID [None]:
 AWS Secret Access Key [None]:
 Default region name [None]: us-east-1
 Default output format [None]:
-
-Terraform files in this repo are written to work with `us-east-1`, so while configuring your aws credentials set,
-`Default region name [None]: us-east-1`
+```
 
 ## Clone this repo
 
