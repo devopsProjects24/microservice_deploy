@@ -270,7 +270,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'  # Add your git repo here
+                git branch: 'main', url: 'https://github.com/rahulprakash05/DevSecOps-Netflix.git'   # Add your git repo here
             }
         }
         stage("Sonarqube Analysis "){
