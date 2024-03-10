@@ -67,6 +67,7 @@ cd microservice_deploy/terraform
 ## Joining the Worker Nodes
 
 * Login to Master and all the Worker Nodes.
+
 * On Master Node: Generate Join Token
 ```bash
 kubeadm token create --print-join-command
@@ -75,7 +76,7 @@ kubeadm token create --print-join-command
 ```bash
 sudo <token>
 ```
-* back On Master Node: List the Nodes
+* Back On Master Node: List the Nodes
 ```bash
 kubectl get nodes
 ```
