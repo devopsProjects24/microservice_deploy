@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: postgres-deploy
   labels:
+    env: dev
     app: postgres
+    project: javawebapp
 spec:
   replicas: 1
   selector:

@@ -1,0 +1,64 @@
+# Define the Persistent Volume (PV) (replace with your desired storage details)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nexus-pv
+spec:
+  capacity:
+    storage: 2Gi # Adjust storage size as needed
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /nexus # Replace with your actual host directory path
+  # Alternatively, use other storage options like NFS or cloud storage
+---
+# Define the Persistent Volume Claim (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nexus-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi # Must match the size defined in the PV
+
+---
+
+# Deployment (updated to use PVC)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonatype-nexus
+  labels:
+    app: sonatype-nexus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonatype-nexus
+  template:
+    metadata:
+      labels:
+        app: sonatype-nexus
+    spec:
+      containers:
+      - name: sonatype-nexus
+        image: sonatype/nexus3:latest # Replace with desired version if needed
+        ports:
+        - containerPort: 8081
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "2.5Gi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+      volumes:
+      - name: nexus-data
+        persistentVolumeClaim:
+          claimName: nexus-pvc

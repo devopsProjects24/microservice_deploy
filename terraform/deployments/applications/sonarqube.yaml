@@ -1,9 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sonarqube-deployment
+  name: sonarqube-deploy
   labels:
+    env: dev
     app: sonarqube
+    project: javawebapp
 spec:
   replicas: 1
   selector:
@@ -26,6 +28,13 @@ spec:
           value: sonarqube
         - name: SONARQUBE_JDBC_PASSWORD
           value: password
+        volumeMounts:
+        - name: efs-storage-sq
+          mountPath: /opt/sonarqube/data
+      volumes:
+      - name: efs-storage-sq
+        persistentVolumeClaim:
+          claimName: efs-claim
 ---
 apiVersion: v1
 kind: Service

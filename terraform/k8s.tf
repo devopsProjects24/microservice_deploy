@@ -2,24 +2,28 @@
 resource "aws_instance" "k8s-master" {
   count           = 1
   instance_type   = "t2.medium"
-  ami             = "ami-0440d3b780d96b29d"
-  key_name        = "practice"
-  user_data = file("${path.module}/k8s-master.sh")
+  ami             = "ami-07d9b9ddc6cd8dd30"
+  key_name        = "aws_linux_server"
+  user_data       = file("${path.module}/user_data/k8s-master.sh")
   subnet_id       = aws_subnet.public_subnets[count.index].id
   security_groups = [aws_security_group.k8s_security_group.id]
 
   tags = {
-    Name = "k8s-master-${count.index}"
+    Name = "k8s-master"
   }
 }
-# Instances in public subnets for k8s-worker
+
+locals {
+  chosen_subnet_index = 0 # You can change this index if you want to choose a different subnet
+}
+
 resource "aws_instance" "k8s-worker" {
-  count           = 1
+  count           = 2
   instance_type   = "t2.medium"
-  ami             = "ami-0440d3b780d96b29d"
-  key_name        = "practice"
-  user_data = file("${path.module}/k8s-worker.sh")
-  subnet_id       = aws_subnet.public_subnets[count.index].id
+  ami             = "ami-07d9b9ddc6cd8dd30"
+  key_name        = "aws_linux_server"
+  user_data       = file("${path.module}/user_data/k8s-worker.sh")
+  subnet_id       = aws_subnet.public_subnets[local.chosen_subnet_index].id
   security_groups = [aws_security_group.k8s_security_group.id]
 
   tags = {
@@ -30,9 +34,15 @@ resource "aws_instance" "k8s-worker" {
 resource "aws_security_group" "k8s_security_group" {
   vpc_id = aws_vpc.cloudinfra_vpc.id
 
- ingress { #http
+  ingress { #http
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress { #http
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -56,39 +66,44 @@ resource "aws_security_group" "k8s_security_group" {
   }
 
   ingress { # etcd server
-    from_port   = 2379
-    to_port     = 2379
+    from_port   = 6783
+    to_port     = 6783
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress { # etcd server
+    from_port   = 6784
+    to_port     = 6784
+    protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress { # etcd server
-    from_port   = 2380
+    from_port   = 2379
     to_port     = 2380
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress { # kubelet API
-    from_port   = 10250
-    to_port     = 10250
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress { # kube-scheduler
-    from_port   = 10259
+    from_port   = 10248
     to_port     = 10259
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress { # kube-controller
-    from_port   = 10257
-    to_port     = 10257
+  ingress { # kubelet API
+    from_port   = 30000
+    to_port     = 32767
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-   egress {
+  ingress { # etcd server
+    from_port   = 2049
+    to_port     = 2049
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -98,4 +113,23 @@ resource "aws_security_group" "k8s_security_group" {
   tags = {
     Name = "k8s_security_group"
   }
+}
+
+### EFS Configuration
+
+resource "aws_efs_file_system" "k8s_worker_efs" {
+  creation_token = "k8s_worker_efs"
+  encrypted      = true
+
+  tags = {
+    Name = "k8s_worker_efs"
+  }
+}
+
+
+resource "aws_efs_mount_target" "k8s_worker_efs_mount_targets" {
+  count           = 1
+  file_system_id  = aws_efs_file_system.k8s_worker_efs.id
+  subnet_id       = aws_subnet.public_subnets[local.chosen_subnet_index].id
+  security_groups = [aws_security_group.k8s_security_group.id]
 }
