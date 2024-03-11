@@ -8,6 +8,7 @@ steps include,
   * Configure AWS Credentials
   * Clone this repo
   * Provision the infrastructure
+  * Joining the Worker Nodes
 
 ## Get Started
 
@@ -47,6 +48,14 @@ Now change into the `microservice_deploy/terraform` directory
 ```bash
 cd microservice_deploy/terraform
 ```
+## Update The key_pair Name
+* Choose one of your key pairs. See [EC2 console](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#KeyPairs:).
+* Update the below command with your own key pair name,
+  Replace "your_key" with your own key pair name from AWS console.
+  
+```bash
+sed -i 's/project_key/your_key/g' k8s.tf
+```
 
 ## Provision the infrastructure
 
@@ -63,4 +72,21 @@ cd microservice_deploy/terraform
     ```
     Apply complete! Resources: 22 added, 0 changed, 0 destroyed.
 * Wait for all instances to be ready (Instance state - `running`, Status check - `2/2 checks passed`). This will take 1-2 minutes. See [EC2 console](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running).
+
+## Joining the Worker Nodes
+
+* Login to Master and all the Worker Nodes.
+
+* On Master Node: Generate Join Token
+```bash
+kubeadm token create --print-join-command
+```
+* On Worker Nodes: Apply the Token
+```bash
+sudo <token>
+```
+* Back On Master Node: List the Nodes
+```bash
+kubectl get nodes
+```
 * If Provisioned successfully, terraform will create the required infrastructure for javawebapp Project.
