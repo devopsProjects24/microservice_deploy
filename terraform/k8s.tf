@@ -1,9 +1,15 @@
+data "aws_key_pair" "your_key" {
+  key_name           = "project_key" # Provide Your own key_name in us-east-1 Region
+  include_public_key = true
+}
+
+
 # Instances in public subnets for k8s-master
 resource "aws_instance" "k8s-master" {
   count           = 1
   instance_type   = "t2.medium"
-  ami             = "ami-07d9b9ddc6cd8dd30"
-  key_name        = "aws_linux_server"
+  ami             = "ami-0cd59ecaf368e5ccf"
+  key_name        = data.aws_key_pair.your_key.key_name
   user_data       = file("${path.module}/user_data/k8s-master.sh")
   subnet_id       = aws_subnet.public_subnets[count.index].id
   security_groups = [aws_security_group.k8s_security_group.id]
@@ -20,8 +26,8 @@ locals {
 resource "aws_instance" "k8s-worker" {
   count           = 2
   instance_type   = "t2.medium"
-  ami             = "ami-07d9b9ddc6cd8dd30"
-  key_name        = "aws_linux_server"
+  ami             = "ami-0cd59ecaf368e5ccf"
+  key_name        = data.aws_key_pair.your_key.key_name
   user_data       = file("${path.module}/user_data/k8s-worker.sh")
   subnet_id       = aws_subnet.public_subnets[local.chosen_subnet_index].id
   security_groups = [aws_security_group.k8s_security_group.id]
