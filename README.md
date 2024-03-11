@@ -8,6 +8,7 @@ steps include,
   * Configure AWS Credentials
   * Clone this repo
   * Provision the infrastructure
+  * Joining the Worker Nodes
 
 ## Get Started
 
@@ -48,7 +49,7 @@ Now change into the `microservice_deploy/terraform` directory
 cd microservice_deploy/terraform
 ```
 ## Update The key_pair Name
-* Choose one of your key pairs [EC2 console](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#KeyPairs:).
+* Choose one of your key pairs. See [EC2 console](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#KeyPairs:).
 * Update the below command with your own key pair name,
   Replace "your_key" with your own key pair name from AWS console.
   
