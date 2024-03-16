@@ -4,7 +4,7 @@ metadata:
   name: efs-pv
 spec:
   capacity:
-    storage: 12Gi
+    storage: 4Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -12,6 +12,6 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-05f513036414366b9
+    volumeHandle: fs-02a733fb5f7c904f6
     volumeAttributes:
       mounttargetip: "10.0.0.211"

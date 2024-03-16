@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-deploy
+  labels:
+    env: dev
+    app: argocd
+    project: javawebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argocd
+  template:
+    metadata:
+      labels:
+        app: argocd
+    spec:
+      containers:
+      - name: argocd
+        image: argoproj/argocd
+        ports:
+        - containerPort: 8090
+        volumeMounts:
+        - name: argocd-storage
+          mountPath: /data
+      volumes:
+      - name: argocd-storage
+        persistentVolumeClaim:
+          claimName: efs-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-service
+  labels:
+    env: dev
+spec:
+  type: NodePort
+  selector:
+    app: argocd
+  ports:
+  - port: 8090
+    targetPort: 8090
+    nodePort: 30004
+

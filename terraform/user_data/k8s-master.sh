@@ -49,9 +49,10 @@ sudo apt-get install -y jq
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo kubeadm config images pull
 sudo kubeadm init
-mkdir -p /home/ubuntu/.kube
-sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
-sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config
-sudo chown -R ubuntu:ubuntu /home/ubuntu/.kube
-sudo -u ubuntu kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+HOME="/home/ubuntu"
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo chown -R ubuntu:ubuntu $HOME/.kube
+sudo -u ubuntu kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/calico.yaml
 # kubeadm token create --print-join-command
