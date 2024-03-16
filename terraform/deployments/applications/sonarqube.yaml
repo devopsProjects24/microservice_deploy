@@ -23,18 +23,11 @@ spec:
         - containerPort: 9000
         env:
         - name: SONARQUBE_JDBC_URL
-          value: "jdbc:postgresql://postgres-service:5432/sonarqubedb"
+          value: "jdbc:postgresql://pod/postgres-statefulset-0.postgres-service:5432/sonarqubedb"
         - name: SONARQUBE_JDBC_USERNAME
           value: sonarqube
         - name: SONARQUBE_JDBC_PASSWORD
           value: password
-        volumeMounts:
-        - name: efs-storage-sq
-          mountPath: /opt/sonarqube/data
-      volumes:
-      - name: efs-storage-sq
-        persistentVolumeClaim:
-          claimName: efs-claim
 ---
 apiVersion: v1
 kind: Service
