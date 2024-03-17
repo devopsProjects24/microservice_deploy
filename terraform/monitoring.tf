@@ -1,4 +1,4 @@
-# Create an EC2 instance with an attached EBS volume
+# Create an EC2 instance for monitoring with an attached EBS volume
 resource "aws_instance" "Monitoring" {
   count           = 1
   instance_type   = "t2.medium"
