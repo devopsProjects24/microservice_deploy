@@ -1,5 +1,5 @@
 data "aws_key_pair" "your_key" {
-  key_name           = "aws_linux_server" # Provide Your own key_name in us-east-1 Region
+  key_name           = "project_key" # Provide Your own key_name in us-east-1 Region
   include_public_key = true
 }
 
