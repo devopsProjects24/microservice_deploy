@@ -54,7 +54,7 @@ cd microservice_deploy/terraform
   Replace "your_key" with your own key pair name from AWS console.
   
 ```bash
-sed -i 's/project_key/your_key/g' k8s.tf
+sed -i 's/project_key/your_key/g' k8s_master.tf
 ```
 
 ## Provision the infrastructure
