@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: netflix-app
+  name: javawebapp
   labels:
-    app: netflix-app
+    app: javawebapp
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: netflix-app
+      app: javawebapp
   template:
     metadata:
       labels:
-        app: netflix-app
+        app: javawebapp
     spec:
       containers:
-      - name: netflix-app
-        image: nasi101/netflix:latest
+      - name: javawebappp
+        image: rahulprakash05/javawebapp:1.0
         ports:
-        - containerPort: 80
+        - containerPort: 8080
