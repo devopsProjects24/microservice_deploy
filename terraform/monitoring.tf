@@ -9,9 +9,9 @@ resource "aws_instance" "Monitoring" {
 
   # Define EBS block device mapping for the instance
   root_block_device {
-    volume_type           = "gp2"  # General Purpose SSD (default)
-    volume_size           = 20     # Size in gigabytes
-    delete_on_termination = true   # Automatically delete volume when instance is terminated
+    volume_type           = "gp2" # General Purpose SSD (default)
+    volume_size           = 20    # Size in gigabytes
+    delete_on_termination = true  # Automatically delete volume when instance is terminated
   }
   tags = {
     Name = "Monitoring"
@@ -22,7 +22,7 @@ resource "aws_instance" "Monitoring" {
 resource "aws_security_group" "monitoring_security_group" {
   vpc_id = aws_vpc.cloudinfra_vpc.id
 
-    ingress { # HTTP
+  ingress { # HTTP
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"

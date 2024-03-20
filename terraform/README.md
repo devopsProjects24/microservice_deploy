@@ -67,7 +67,7 @@ sed -i 's/project_key/your_key/g' k8s_master.tf
     terraform apply
     ```
 
-    This should take about half a minute. If this all runs correctly, you will see something like the following at the end of all the output.
+    This should take atleast 2-4 minutes. If this all runs correctly, you will see something like the following at the end of all the output.
 
     ```
     Apply complete! Resources: 22 added, 0 changed, 0 destroyed.
