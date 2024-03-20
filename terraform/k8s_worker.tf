@@ -1,13 +1,20 @@
 resource "aws_launch_template" "k8s_worker" {
-  name            = "k8s_worker_tpl"
-  image_id        = "ami-0cd59ecaf368e5ccf"
-  instance_type   = "t2.medium"
-  key_name        = data.aws_key_pair.your_key.key_name
-  user_data       = filebase64("${path.module}/user_data/k8s-worker.sh")
+  name          = "k8s_worker_tpl"
+  image_id      = "ami-0cd59ecaf368e5ccf"
+  instance_type = "t2.medium"
+  key_name      = data.aws_key_pair.your_key.key_name
+  user_data     = filebase64("${path.module}/user_data/k8s-worker.sh")
 
   network_interfaces {
     subnet_id       = aws_subnet.public_subnets[local.chosen_subnet_index].id
     security_groups = [aws_security_group.k8s_worker_security_group.id]
+  }
+
+  block_device_mappings {
+    device_name = "/dev/sda1"
+    ebs {
+      volume_size = 15
+    }
   }
 
   tag_specifications {
